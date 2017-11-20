@@ -1,7 +1,6 @@
 package com.iia.spring;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,10 +40,12 @@ public class Application {
 	@Bean
 	public CommandLineRunner clr(CustomerRepository customerRepository, ProductRepository productRepository, CaddyRepository caddyRepository) {
 		return (args) -> {
+
+			productRepository.deleteAll();
+			caddyRepository.deleteAll();
+			customerRepository.deleteAll();
 			
 			//PRODUCT
-			productRepository.deleteAll();
-			
 			Product product1 = new Product("Jouet", "Tres utile pour les enfants", 666, true, 1299.99f);
 			Product product2 = new Product("Gateau", "Manger", 666, true, 1299.99f);
 			Product product3 = new Product("Joris", "Inutle", 0, false, 0.01f);
@@ -55,29 +56,29 @@ public class Application {
 				DateFormat.SHORT,
 				DateFormat.SHORT);
 			
-			//CADDY
-			productRepository.deleteAll();
-
-			Caddy caddy1 = new Caddy(shortDateFormat.format(date), CaddyState.Brouillon, 125849.15f);
-			Caddy caddy2 = new Caddy(shortDateFormat.format(date), CaddyState.EnCours, 125849.15f);
-			Caddy caddy3 = new Caddy(shortDateFormat.format(date), CaddyState.Finie, 125849.15f);
-			
 			//CUSTOMER
-			customerRepository.deleteAll();
-
-			Customer customer1 = new Customer("Balidas", "Benjamin", "0649381612", "5 impasse de la boistardiere", 53240, "Saint jean sur mayenne", caddy1);
-			Customer customer2 = new Customer("Guerrier", "Joris", "0606060606", "Rue du plouc", 49000, "Angers", caddy2);
-			Customer customer3 = new Customer("Antonio", "Maxime", "0606060606", "Rue du dev", 53000, "Laval", caddy3);
+			Customer customer1 = new Customer("Balidas", "Benjamin", "0649381612", "5 impasse de la boistardiere", 53240, "Saint jean sur mayenne");
+			Customer customer2 = new Customer("Guerrier", "Joris", "0606060606", "Rue du plouc", 49000, "Angers");
+			Customer customer3 = new Customer("Antonio", "Maxime", "0606060606", "Rue du dev", 53000, "Laval");
 			
-			List<Customer> customers = new ArrayList<Customer>();
-			customers.add(customer1);
-			customers.add(customer2);
-			customers.add(customer3);
+			//CADDY
+			Caddy caddy1 = new Caddy(shortDateFormat.format(date), CaddyState.Brouillon, 125849.15f, customer1);
+			Caddy caddy2 = new Caddy(shortDateFormat.format(date), CaddyState.EnCours, 125849.15f, customer1);
+			Caddy caddy3 = new Caddy(shortDateFormat.format(date), CaddyState.Finie, 125849.15f, customer1);
+			Caddy caddy4 = new Caddy(shortDateFormat.format(date), CaddyState.Brouillon, 125849.15f, customer1);
+			Caddy caddy5 = new Caddy(shortDateFormat.format(date), CaddyState.EnCours, 125849.15f, customer1);
+			
+			List<Caddy> caddys = new ArrayList<Caddy>();
+			caddys.add(caddy1);
+			caddys.add(caddy2);
+			caddys.add(caddy3);
+			caddys.add(caddy4);
+			caddys.add(caddy5);
 			
 			//CUSTOMER OF THE CADDYS
-			caddy1.setCustomers(customers);
-			caddy2.setCustomers(customers);
-			caddy3.setCustomers(customers);
+			customer1.setCaddys(caddys);
+			customer2.setCaddys(caddys);
+			customer3.setCaddys(caddys);
 			
 			//PRODUCT <- CADDY
 			product1.CaddyAdd(caddy1);
@@ -101,17 +102,6 @@ public class Application {
 			logger.info("\nThis product is added : " + product3.toString());
 			logger.info("\n*************************************************************************************************");
 			
-			//SAVE CADDY
-			logger.info("\n*************************************************************************************************");
-			caddyRepository.save(caddy1);
-			logger.info("\nThis caddy is added : " + caddy1.toString());
-			caddyRepository.save(caddy2);
-			logger.info("\nThis caddy is added : " + caddy2.toString());
-			caddyRepository.save(caddy3);
-			logger.info("\nThis caddy is added : " + caddy3.toString());
-			logger.info("\n*************************************************************************************************");
-			
-			
 			//SAVE CUSTOMER
 			logger.info("\n*************************************************************************************************");
 			customerRepository.save(customer1);
@@ -120,6 +110,16 @@ public class Application {
 			logger.info("\nThis customer is added : " + customer2.toString());
 			customerRepository.save(customer3);
 			logger.info("\nThis customer is added : " + customer3.toString());
+			logger.info("\n*************************************************************************************************");
+			
+			//SAVE CADDY
+			logger.info("\n*************************************************************************************************");
+			caddyRepository.save(caddy1);
+			logger.info("\nThis caddy is added : " + caddy1.toString());
+			caddyRepository.save(caddy2);
+			logger.info("\nThis caddy is added : " + caddy2.toString());
+			caddyRepository.save(caddy3);
+			logger.info("\nThis caddy is added : " + caddy3.toString());
 			logger.info("\n*************************************************************************************************");
 			
 		};

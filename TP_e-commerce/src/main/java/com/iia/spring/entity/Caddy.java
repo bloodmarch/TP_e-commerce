@@ -1,7 +1,6 @@
 package com.iia.spring.entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -38,13 +37,15 @@ public class Caddy {
 	/**
 	 * Constructor class @see Caddy
 	 * @param date			@see String			date of this @see Caddy
-	 * @param state			@see CaddyState		State of this Caddy
+	 * @param state			@see CaddyState		state of this @see Caddy
 	 * @param totalPrice	@see Float			totalPrice of this @see Caddy
+	 * @param customer		@see Customer		customer of this @see Caddy
 	 */
-	public Caddy(String date, CaddyState state, float totalPrice) {
+	public Caddy(String date, CaddyState state, float totalPrice, Customer customer) {
 		this.setDate(date)
 			.setState(state)
-			.setTotalPrice(totalPrice);
+			.setTotalPrice(totalPrice)
+			.setCustomer(customer);
 	}
 	
 	/**
@@ -60,27 +61,27 @@ public class Caddy {
 	}
 	
 	/**
-	 * References OneToMany to @see Customer 
+	 * References ManyToOne to @see Customer
 	 */
-	@OneToMany(mappedBy="caddy")
-	private List<Customer> customers;
-	
+	@ManyToOne
+	private Customer customer;
+
 	/**
-	 * @return the customers
+	 * @return the customer
 	 */
-	public List<Customer> getCustomers() {
-		return customers;
+	public Customer getCustomer() {
+		return customer;
 	}
 
 	/**
-	 * @param customers the customers to set
-	 * @return this @see Caddy
+	 * @param customer the customer to set
+	 * @return 	this @see Caddy
 	 */
-	public Caddy setCustomers(List<Customer> customers) {
-		this.customers = customers;
+	public Caddy setCustomer(Customer customer) {
+		this.customer = customer;
 		return this;
 	}
-
+	
 	/**
 	 * References ManyToMany to @see Product
 	 */
@@ -90,8 +91,8 @@ public class Caddy {
 	 */
 	@JoinTable(
 			name = "product_caddy",
-			joinColumns = {@JoinColumn(name = "product_id")},
-			inverseJoinColumns = {@JoinColumn(name = "caddy_id")})
+			joinColumns = {@JoinColumn(name = "caddy_id")},
+			inverseJoinColumns = {@JoinColumn(name = "product_id")})
 	private Set<Product> products = new HashSet<>();
 
 	/**
@@ -117,7 +118,7 @@ public class Caddy {
 	public void ProductAdd(Product product) {
 		this.products.add(product);
 	}
-
+	
 	/**
 	 * @return the id
 	 */

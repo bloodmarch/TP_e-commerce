@@ -69,14 +69,14 @@ public class Product {
 	private Set<Caddy> caddys = new HashSet<>();
 	
 	/**
-	 * @return the @see List<Caddy> caddys
+	 * @return the @see Set<Caddy> caddys
 	 */
 	public Set<Caddy> getCaddys() {
 		return caddys;
 	}
 
 	/**
-	 * @param caddys the @see List<Caddy> caddys to set
+	 * @param caddys the @see Set<Caddy> caddys to set
 	 * @return this @see Product
 	 */
 	public Product setCaddys(Set<Caddy> caddys) {

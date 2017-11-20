@@ -1,10 +1,12 @@
 package com.iia.spring.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Class @see Customer from database
@@ -36,16 +38,14 @@ public class Customer {
 	 * @param address		@see String		address of this @see Customer
 	 * @param cp			@see Integer	cp of this @see Customer
 	 * @param city 			@see String		city of this @see Customer
-	 * @param caddy			@see Caddy 		caddy of this @see Customer
 	 */	
-	public Customer(String lastName, String firstName, String phone, String address, int cp, String city, Caddy caddy) {
+	public Customer(String lastName, String firstName, String phone, String address, int cp, String city) {
 		this.setLastName(lastName)
 			.setFirstName(firstName)
 			.setPhone(phone)
 			.setAddress(address)
 			.setCp(cp)
-			.setCity(city)
-			.setCaddy(caddy);
+			.setCity(city);
 	}
 	
 	/**
@@ -58,31 +58,30 @@ public class Customer {
 			+ "\nPhone : " + this.getPhone() 
 			+ "\nAddress : " + this.getAddress() 
 			+ "\nCp : " + this.getCp() 
-			+ "\nCity : " + this.getCity() 
-			+ "\nCaddy : " + this.getCaddy() 
+			+ "\nCity : " + this.getCity()
 			+ "\n";
 		
 	}
 
 	/**
-	 * References ManyToOne to @see Caddy
+	 * References OneToMany to @see Caddy 
 	 */
-	@ManyToOne
-	private Caddy caddy;
+	@OneToMany(mappedBy="customer")
+	private List<Caddy> caddys;
 	
 	/**
-	 * @return the @see Caddy caddy
+	 * @return @see List<Caddy> 	A list of the @see Caddy
 	 */
-	public Caddy getCaddy() {
-		return caddy;
+	public List<Caddy> getCaddys() {
+		return caddys;
 	}
 
 	/**
-	 * @param caddy the @see Caddy caddy to set
-	 * @return this @see Customer
+	 * @param customers the customers to set
+	 * @return this @see Caddy
 	 */
-	public Customer setCaddy(Caddy caddy) {
-		this.caddy = caddy;
+	public Customer setCaddys(List<Caddy> caddys) {
+		this.caddys = caddys;
 		return this;
 	}
 
